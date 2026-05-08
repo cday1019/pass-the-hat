@@ -19,12 +19,12 @@
 
             {{-- Player Selection --}}
             @if(!$myPlayerId)
-                <div class="bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-blue-100 animate-in fade-in zoom-in duration-300">
-                    <h3 class="text-center font-extrabold text-2xl mb-6 text-slate-800">Identify Yourself, Slugger!</h3>
+                <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-blue-100 dark:border-slate-800 animate-in fade-in zoom-in duration-300">
+                    <h3 class="text-center font-extrabold text-2xl mb-6 text-slate-800 dark:text-slate-100">Identify Yourself, Slugger!</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         @foreach($game->players as $p)
                             <button wire:click="claimPlayer({{ $p->id }})"
-                                    class="bg-white border-2 border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all py-3 rounded-2xl font-bold shadow-sm hover:shadow-md active:scale-95">
+                                    class="bg-white dark:bg-slate-800 border-2 border-blue-100 dark:border-slate-700 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white hover:border-blue-600 transition-all py-3 rounded-2xl font-bold shadow-sm hover:shadow-md active:scale-95">
                                 {{ $p->name }}
                             </button>
                         @endforeach
@@ -54,10 +54,10 @@
             {{-- Action Controls --}}
             <div class="space-y-4">
                 @if($isCurrentTurn)
-                    <div class="bg-white p-1 rounded-3xl shadow-lg border border-orange-200">
-                        <div class="bg-orange-50/50 rounded-[1.4rem] p-6 text-center border border-orange-100">
-                            <h3 class="text-orange-600 uppercase tracking-widest text-xs font-black">You're at the plate</h3>
-                            <div class="text-4xl font-extrabold text-slate-800 mt-1">Make Your Play!</div>
+                    <div class="bg-white dark:bg-slate-900 p-1 rounded-3xl shadow-lg border border-orange-200 dark:border-orange-900/50">
+                        <div class="bg-orange-50/50 dark:bg-orange-950/20 rounded-[1.4rem] p-6 text-center border border-orange-100 dark:border-orange-900/30">
+                            <h3 class="text-orange-600 dark:text-orange-400 uppercase tracking-widest text-xs font-black">You're at the plate</h3>
+                            <div class="text-4xl font-extrabold text-slate-800 dark:text-slate-100 mt-1">Make Your Play!</div>
                         </div>
                     </div>
 
@@ -94,14 +94,14 @@
                         </button>
                     </div>
                 @else
-                    <div class="bg-white/50 backdrop-blur-sm p-12 rounded-[2.5rem] text-center border-2 border-dashed border-slate-200">
+                    <div class="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-12 rounded-[2.5rem] text-center border-2 border-dashed border-slate-200 dark:border-slate-800">
                         <div class="relative inline-block lg:block">
                             <div class="text-6xl mb-4 animate-bounce hidden lg:block">⏳</div>
                             <div class="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full hidden lg:block"></div>
                         </div>
-                        <p class="text-slate-400 font-bold uppercase tracking-widest text-sm">Waiting for Pitch...</p>
-                        <p class="text-2xl font-extrabold text-slate-800 mt-2">
-                             <span class="text-blue-600">{{ $game->currentHolder()->name }}</span> is batting
+                        <p class="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest text-sm">Waiting for Pitch...</p>
+                        <p class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 mt-2">
+                             <span class="text-blue-600 dark:text-blue-400">{{ $game->currentHolder()->name }}</span> is batting
                         </p>
                     </div>
                 @endif
@@ -112,21 +112,21 @@
         <div class="lg:col-span-5 xl:col-span-4 space-y-8">
 
             {{-- Player Standings --}}
-            <div class="bg-white rounded-[2rem] p-8 shadow-xl border border-slate-100">
+            <div class="bg-white dark:bg-slate-900 rounded-[2rem] p-8 shadow-xl border border-slate-100 dark:border-slate-800">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-slate-800 uppercase text-sm font-black tracking-widest">Player Standings</h3>
-                    <span class="bg-slate-100 text-slate-500 text-[10px] px-2 py-1 rounded-full font-bold">LIVE</span>
+                    <h3 class="text-slate-800 dark:text-slate-200 uppercase text-sm font-black tracking-widest">Player Standings</h3>
+                    <span class="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-[10px] px-2 py-1 rounded-full font-bold">LIVE</span>
                 </div>
                 <div class="space-y-3">
                     @foreach($game->players as $p)
-                        <div class="flex justify-between items-center p-4 rounded-2xl transition-all {{ $game->current_turn_index == $p->sort_order ? 'bg-orange-50 border-2 border-orange-200 scale-[1.02] shadow-md' : 'bg-slate-50 border border-slate-100' }}">
+                        <div class="flex justify-between items-center p-4 rounded-2xl transition-all {{ $game->current_turn_index == $p->sort_order ? 'bg-orange-50 dark:bg-orange-950/30 border-2 border-orange-200 dark:border-orange-800 scale-[1.02] shadow-md' : 'bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800' }}">
                             <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center mr-3 text-xs font-bold {{ $game->current_turn_index == $p->sort_order ? 'bg-orange-200 text-orange-700' : 'text-slate-500' }}">
+                                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center mr-3 text-xs font-bold {{ $game->current_turn_index == $p->sort_order ? 'bg-orange-200 dark:bg-orange-800 text-orange-700 dark:text-orange-200' : 'text-slate-500 dark:text-slate-400' }}">
                                     {{ $loop->iteration }}
                                 </div>
-                                <span class="font-bold text-slate-700">{{ $p->name }}</span>
+                                <span class="font-bold text-slate-700 dark:text-slate-300">{{ $p->name }}</span>
                             </div>
-                            <span class="{{ $p->balance < 0 ? 'text-red-500' : 'text-emerald-600' }} font-display text-xl">
+                            <span class="{{ $p->balance < 0 ? 'text-red-500 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400' }} font-display text-xl">
                                 {{ $p->formatted_balance }}
                             </span>
                         </div>
