@@ -16,10 +16,10 @@ class GamePlay extends Component
         $this->myPlayerId = session("game_{$game->id}_player_id");
     }
 
-    public function handlePlay($action, $amount)
+    public function handlePlay($action)
     {
         // Just call the model!
-        $this->game->recordPlay($action, $amount);
+        $this->game->recordPlay($action);
         $this->game->refresh();
     }
 
@@ -38,7 +38,7 @@ class GamePlay extends Component
             'isHost' => $isHost, // Pas
             'history' => $this->game->transactions()
                 ->with('player') // This is "Eager Loading"
-                ->latest()
+                ->latest('id')
                 ->take(5)
                 ->get()
         ]);

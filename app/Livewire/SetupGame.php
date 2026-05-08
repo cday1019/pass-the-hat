@@ -11,7 +11,7 @@ class SetupGame extends Component
     public $gameName = '';
     public $newPlayerName = '';
     public $players = []; // Temporary storage for the names before we save to DB
-
+    public $anteAmount = 1;
     public function addPlayer()
     {
         $this->validate([
@@ -36,6 +36,7 @@ class SetupGame extends Component
         $this->validate([
             'gameName' => 'required|min:3',
             'players' => 'array|min:2', // Ensure at least 2 players
+            'anteAmount' => 'required|numeric|min:0.01',
         ]);
 
         return DB::transaction(function () {
@@ -43,6 +44,7 @@ class SetupGame extends Component
             $game = Game::create([
                 'name' => $this->gameName ?: 'New Baseball Game',
                 'pot' => 0,
+                'ante_amount' => $this->anteAmount,
                 'current_turn_index' => 0
             ]);
 
@@ -58,6 +60,8 @@ class SetupGame extends Component
             // ... after $game and players are created
             session()->put("game_{$game->id}_is_host", true);
             session()->save();
+
+            $game->collectAntes($this->anteAmount);
 
             // 3.  success
             return redirect()->route('game.play', $game->id);

@@ -13,8 +13,8 @@ class GameControl extends Component
         $this->game = $game;
     }
 
-    public function handlePlay($action, $amount) {
-        $this->game->recordPlay($action, $amount);
+    public function handlePlay($action) {
+        $this->game->recordPlay($action);
         $this->game->refresh();
     }
 

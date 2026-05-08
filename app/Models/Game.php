@@ -15,7 +15,7 @@ class Game extends Model
 
     public function transactions()
     {
-        return $this->hasMany(Transaction::class)->latest();
+        return $this->hasMany(Transaction::class)->latest('id');
     }
 
     // Helper to get the person currently holding the hat
@@ -38,7 +38,7 @@ class Game extends Model
         $this->update(['current_turn_index' => $nextIndex]);
     }
 
-    public function recordPlay(string $action, float $amount): void
+    public function recordPlay(string $action): void
     {
         $player = $this->currentHolder();
 
@@ -46,16 +46,17 @@ class Game extends Model
             return;
         }
 
-        if ($action === 'out') {
-            $player->decrement('balance', 1);
-            $this->increment('pot', 1);
-        } elseif ($action === 'hr') {
-            $player->increment('balance', $this->pot);
-            $this->update(['pot' => 0]);
-        } else {
-            $payout = min(abs($amount), $this->pot);
-            $player->increment('balance', $payout);
-            $this->decrement('pot', $payout);
+        $amount = match ($action) {
+            'out' => -1.0,
+            'single' => 1.0,
+            'double' => 2.0,
+            'triple' => 3.0,
+            'hr' => (float) $this->pot,
+            default => 0.0,
+        };
+
+        if($amount > $this->pot){
+            $amount = $this->pot;
         }
 
         $this->transactions()->create([
@@ -64,6 +65,46 @@ class Game extends Model
             'amount' => $amount,
         ]);
 
+        $player->increment('balance', $amount);
+        $this->decrement('pot', $amount);
+
+        if($this->pot == 0){
+            $this->collectAntes();
+        }
+
         $this->passTheHat();
+    }
+
+    public function collectAntes(?float $amount = null): void
+    {
+        $amount = $amount ?? (float) $this->ante_amount;
+
+        \DB::transaction(function () use ($amount) {
+            $players = $this->players;
+            $count = $players->count();
+
+            // 1. Bulk update player balances
+            $this->players()->update([
+                'balance' => \DB::raw("balance - $amount")
+            ]);
+
+            // 2. Bulk update game pot
+            $this->increment('pot', $amount * $count);
+
+            // 3. Batch insert transactions
+            $now = now();
+            $transactions = $players->map(function ($player) use ($amount, $now) {
+                return [
+                    'game_id' => $this->id,
+                    'player_id' => $player->id,
+                    'action' => 'ante',
+                    'amount' => -$amount,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            })->toArray();
+
+            Transaction::insert($transactions);
+        });
     }
 }

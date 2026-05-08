@@ -17,6 +17,14 @@
         <hr>
 
         <div>
+            <label class="block text-sm font-semibold">Ante Amount</label>
+            <input type="number" wire:model="anteAmount" step="0.01" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 @error('anteAmount') border-red-500 @enderror" placeholder="1.00">
+            @error('anteAmount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+        </div>
+
+        <hr>
+
+        <div>
             <label class="block text-sm font-semibold">Add Players (In Seating Order)</label>
             <div class="flex gap-2 mt-1">
                 <input type="text" wire:model="newPlayerName" wire:keydown.enter="addPlayer" class="flex-1 border rounded p-2 @error('newPlayerName') border-red-500 @enderror" placeholder="Friend's name...">
