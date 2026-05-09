@@ -1,7 +1,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div wire:poll.3s class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div wire:poll.3s class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
         {{-- Fixed Header for Mobile --}}
-        <div class="lg:hidden bg-slate-900 -mx-4 -mt-8 mb-6 p-6 shadow-xl sticky top-0 z-20">
+        <div class="lg:hidden bg-slate-900 -mx-4 -mt-8 mb-0 p-4 shadow-xl sticky top-0 z-20">
             <div class="flex justify-between items-center">
                 <div>
                     <h2 class="text-blue-400 font-bold uppercase tracking-widest text-[10px]">The Pot</h2>
@@ -15,7 +15,7 @@
         </div>
 
         {{-- Main Game Area (Left/Top) --}}
-        <div class="lg:col-span-7 xl:col-span-8 space-y-8">
+        <div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-4 lg:gap-8">
 
             {{-- Player Selection --}}
             @if(!$myPlayerId)
@@ -52,10 +52,10 @@
             </div>
 
             {{-- Action Controls --}}
-            <div class="space-y-4">
+            <div class="flex flex-col gap-4">
                 @if($isCurrentTurn)
                     <div class="bg-white dark:bg-slate-900 p-1 rounded-3xl shadow-lg border border-orange-200 dark:border-orange-900/50">
-                        <div class="bg-orange-50/50 dark:bg-orange-950/20 rounded-[1.4rem] p-6 text-center border border-orange-100 dark:border-orange-900/30">
+                        <div class="bg-orange-50/50 dark:bg-orange-950/20 rounded-[1.4rem] p-4 sm:p-6 text-center border border-orange-100 dark:border-orange-900/30">
                             <h3 class="text-orange-600 dark:text-orange-400 uppercase tracking-widest text-xs font-black">You're at the plate</h3>
                             <div class="text-4xl font-extrabold text-slate-800 dark:text-slate-100 mt-1">Make Your Play!</div>
                         </div>
@@ -63,30 +63,35 @@
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <button wire:click="handlePlay('out')"
+                                wire:confirm="out, you sure about that?"
                                 class="flex flex-col items-center justify-center bg-red-500 hover:bg-red-600 text-white p-6 rounded-3xl font-black text-xl shadow-xl transition-all hover:-translate-y-1 active:scale-95">
                             <span class="text-3xl mb-1">❌</span>
                             OUT
                             <span class="text-xs font-medium opacity-80 mt-1">-$1.00</span>
                         </button>
                         <button wire:click="handlePlay('single')"
+                                wire:confirm="single, you sure about that?"
                                 class="flex flex-col items-center justify-center bg-emerald-500 hover:bg-emerald-600 text-white p-6 rounded-3xl font-black text-xl shadow-xl transition-all hover:-translate-y-1 active:scale-95">
                             <span class="text-3xl mb-1">⚾</span>
                             1B
                             <span class="text-xs font-medium opacity-80 mt-1">+$1.00</span>
                         </button>
                         <button wire:click="handlePlay('double')"
+                                wire:confirm="double, you sure about that?"
                                 class="flex flex-col items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white p-6 rounded-3xl font-black text-xl shadow-xl transition-all hover:-translate-y-1 active:scale-95">
                             <span class="text-3xl mb-1">🥈</span>
                             2B
                             <span class="text-xs font-medium opacity-80 mt-1">+$2.00</span>
                         </button>
                         <button wire:click="handlePlay('triple')"
+                                wire:confirm="triple, you sure about that?"
                                 class="flex flex-col items-center justify-center bg-emerald-700 hover:bg-emerald-800 text-white p-6 rounded-3xl font-black text-xl shadow-xl transition-all hover:-translate-y-1 active:scale-95">
                             <span class="text-3xl mb-1">🥉</span>
                             3B
                             <span class="text-xs font-medium opacity-80 mt-1">+$3.00</span>
                         </button>
                         <button wire:click="handlePlay('hr')"
+                                wire:confirm="hr, you sure about that?"
                                 class="col-span-2 md:col-span-4 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white p-8 rounded-[2rem] font-black text-3xl shadow-2xl transition-all hover:-translate-y-1 active:scale-95 border-b-8 border-orange-700 group">
                             <span class="inline-block group-hover:animate-bounce mr-2">🏆</span>
                             HOME RUN
@@ -109,7 +114,7 @@
         </div>
 
         {{-- Sidebar (Right/Bottom) --}}
-        <div class="lg:col-span-5 xl:col-span-4 space-y-8">
+        <div class="lg:col-span-5 xl:col-span-4 flex flex-col gap-4 lg:gap-8">
 
             {{-- Player Standings --}}
             <div class="bg-white dark:bg-slate-900 rounded-[2rem] p-8 shadow-xl border border-slate-100 dark:border-slate-800">
