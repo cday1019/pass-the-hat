@@ -163,6 +163,9 @@
                     @endforelse
                 </div>
             </div>
+
+            {{-- Live MLB Feed --}}
+            <livewire:live-play-log :game="$game" />
         </div>
 
     </div>
