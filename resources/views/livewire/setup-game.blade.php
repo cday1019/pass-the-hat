@@ -13,6 +13,19 @@
 
         <div class="mt-8 space-y-6">
             <div class="space-y-4">
+                @if(count($availableGames) > 0)
+                    <div class="group">
+                        <label class="block text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1 ml-1 group-focus-within:text-blue-500 transition-colors">Select Today's MLB Game</label>
+                        <select wire:model.live="selectedGamePk"
+                                class="block w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-slate-100 font-bold focus:outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-700 transition-all sm:text-sm">
+                            <option value="">-- Choose a game --</option>
+                            @foreach($availableGames as $game)
+                                <option value="{{ $game['gamePk'] }}">{{ $game['description'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+
                 <div class="group">
                     <label class="block text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1 ml-1 group-focus-within:text-blue-500 transition-colors">Matchup / Game Name</label>
                     <input type="text" wire:model="gameName"

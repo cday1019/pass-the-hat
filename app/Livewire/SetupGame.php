@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Game;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class SetupGame extends Component
 {
@@ -12,6 +13,40 @@ class SetupGame extends Component
     public $newPlayerName = '';
     public $players = []; // Temporary storage for the names before we save to DB
     public $anteAmount = 1;
+    public $availableGames = [];
+    public $selectedGamePk = '';
+
+    public function mount()
+    {
+        try {
+            $response = Http::get('https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-05-10');
+            if ($response->successful()) {
+                $data = $response->json();
+                if (isset($data['dates'][0]['games'])) {
+                    foreach ($data['dates'][0]['games'] as $game) {
+                        $this->availableGames[] = [
+                            'gamePk' => $game['gamePk'],
+                            'description' => $game['teams']['away']['team']['name'] . ' @ ' . $game['teams']['home']['team']['name'],
+                        ];
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            // Handle error silently or log it
+        }
+    }
+
+    public function updatedSelectedGamePk($value)
+    {
+        if ($value) {
+            foreach ($this->availableGames as $game) {
+                if ($game['gamePk'] == $value) {
+                    $this->gameName = $game['description'];
+                    break;
+                }
+            }
+        }
+    }
     public function addPlayer()
     {
         $this->validate([
