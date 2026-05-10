@@ -78,6 +78,7 @@ class SetupGame extends Component
             // 1. Create the Game record
             $game = Game::create([
                 'name' => $this->gameName ?: 'New Baseball Game',
+                'mlb_game_pk' => $this->selectedGamePk,
                 'pot' => 0,
                 'ante_amount' => $this->anteAmount,
                 'current_turn_index' => 0
